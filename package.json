@@ -1,0 +1,23 @@
+{
+  "name": "aula-banco-ficticio",
+  "version": "1.0.0",
+  "description": "esse eh um projeto de estudo criando um banco de mentirinha ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/almcarvalho/aula-banco-ficticio.git"
+  },
+  "author": "Lucas Carvalho",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/almcarvalho/aula-banco-ficticio/issues"
+  },
+  "homepage": "https://github.com/almcarvalho/aula-banco-ficticio#readme",
+  "dependencies": {
+    "whatsapp-web.js": "^1.18.4"
+  }
+}
