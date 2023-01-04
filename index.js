@@ -24,8 +24,7 @@ client.on('message', msg => {
     const encontrado = clientes.find(element => element.numero == msg.from);
 
     if (encontrado) {
-        if (encontrado.momento == 1) {
-            //validar
+        if (encontrado.momento == 1) { //saque
             if (encontrado.saldo > msg.body) {
                 encontrado.saldo = encontrado.saldo - msg.body;
                 client.sendMessage(msg.from, `💸 Contando cédulas... 
@@ -33,34 +32,34 @@ client.on('message', msg => {
                 Operação Finalizada com sucesso! 
                 Envie qualquer coisa para continuar...`);
             } else {
-                client.sendMessage(msg.from, `❌Saldo Insuficiente ❌`);
+                client.sendMessage(msg.from, `❌Saldo Insuficiente ou Valor Inválido ❌`);
             }
             encontrado.momento = 0;
             return;
         }
-        if (encontrado.momento == 2) {
-            //recebo a chave pix #TODO validar depois se é um número
+        if (encontrado.momento == 2) { //valor pix para transferir
             encontrado.destino = msg.body;
             client.sendMessage(msg.from, `Informe o valor que você deseja transferir`);
             encontrado.momento = 3;
             return;
         }
-        if (encontrado.momento == 3) {
-            //validar
+        if (encontrado.momento == 3) { //efetuando um pix
             if (encontrado.saldo > msg.body) {
-                console.log('brooks was here');
-                encontrado.saldo = encontrado.saldo - msg.body;
-                //efetuo o pix
                 const destinoPix = clientes[encontrado.destino];
                 if (destinoPix) {
+                    encontrado.saldo = encontrado.saldo - msg.body;
+                    //efetuo o pix
                     destinoPix.saldo = destinoPix.saldo + parseFloat(msg.body);
                     client.sendMessage(msg.from, `Pix de: ${msg.body} efetuado com sucesso para: ${destinoPix.nome}`);
+                    //avisar a outra pessoa
+                    client.sendMessage(destinoPix.numero, `Você recebeu um pix de: ${msg.body} de: ${encontrado.nome}`);
+
                 } else {
                     client.sendMessage(msg.from, `❌ Chave pix não encontrada❌`);
                 }
                 client.sendMessage(msg.from, `💸 Operação finalizada com sucesso...`);
             } else {
-                client.sendMessage(msg.from, `❌Saldo Insuficiente ❌`);
+                client.sendMessage(msg.from, `❌Valor inválido ou Saldo Insuficiente, efetue a operação novamente, operação finalizada ❌`);
             }
             encontrado.momento = 0;
             return;
@@ -80,6 +79,7 @@ client.on('message', msg => {
             { body: '🧨 ENCERRAR ATENDIMENTO 🧨' }], `🏛 Olá, ${msg._data.notifyName} Seja bem vindo(a) ao Ficticious Bank 🏛 apenas para fins didáticos`);
         client.sendMessage(msg.from, button);
     }
+
     if (msg.body == '🚀 ABRIR CONTA 🚀') {
         var cliente = { numero: msg.from, nome: msg._data.notifyName, saldo: 1000, momento: 0, destino: 0 }
         if (!encontrado) {
@@ -91,6 +91,7 @@ ganhou um saldo de R$:${cliente.saldo} reais`);
         }
 
     }
+
     if (msg.body == '💻 ACESSAR MINHA CONTA 💻') {
         if (encontrado) {
             let button = new Buttons('O que deseja fazer na sua conta?', [
@@ -103,9 +104,11 @@ ganhou um saldo de R$:${cliente.saldo} reais`);
             client.sendMessage(msg.from, `💸 Você não possui conta nesse banco!`);
         }
     }
+
     if (msg.body == '💸 CONSULTAR SALDO 💸') {
         client.sendMessage(msg.from, `💸 ${encontrado.nome} SEU SALDO É DE R$:${encontrado.saldo} reais`);
     }
+
     if (msg.body == '🏧 SACAR DINHEIRO 🏧') {
         encontrado.momento = 1;
         client.sendMessage(msg.from, `💸 Informe o valor que você deseja sacar: `);
@@ -115,20 +118,24 @@ ganhou um saldo de R$:${cliente.saldo} reais`);
         //listar as pessoas que tem conta 0 - Fulano, 1 - Sicrano
         var resultado = ``;
 
-        // clientes.forEach(currentItem => {
-        //     resultado = `\n Chave pix: ` + pix + `-` + resultado + currentItem.nome + ``;
-        // });
-
         for (let index = 0; index < clientes.length; index++) {
             const element = clientes[index];
-            resultado = resultado + `\n Chave pix: ` + index + `-` + element.nome + ``;
+
+            if (element.numero != msg.from) {
+                resultado = resultado + `\n Chave pix: ` + index + `-` + element.nome + ``;
+            }
+        }
+        if (clientes) {
+            if (clientes.length <= 1) {
+                client.sendMessage(msg.from, `❌Pix Indisponível! ❌`);
+                encontrado.momento = 0; //espero pela chave pix
+            } else {
+                client.sendMessage(msg.from, `${resultado} \n Informe a chave pix da pessoa que você quer transferir`);
+                encontrado.momento = 2; //espero pela chave pix
+            }
         }
 
-        client.sendMessage(msg.from, `${resultado} \n Informe a chave pix da pessoa que você quer transferir`);
-        encontrado.momento = 2; //espero pela chave pix
     }
-
-
 
 });
 
