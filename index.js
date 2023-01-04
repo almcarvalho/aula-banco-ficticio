@@ -72,12 +72,30 @@ client.on('message', msg => {
         && msg.body != '💻 ACESSAR MINHA CONTA 💻'
         && msg.body != '💸 CONSULTAR SALDO 💸'
         && msg.body != '🏧 SACAR DINHEIRO 🏧'
-        && msg.body != '💹 TRANSFERIR (PIX) 💹') {
-        let button = new Buttons('O que deseja fazer agora?', [
-            { body: '🚀 ABRIR CONTA 🚀' },
-            { body: '💻 ACESSAR MINHA CONTA 💻' },
-            { body: '🧨 ENCERRAR ATENDIMENTO 🧨' }], `🏛 Olá, ${msg._data.notifyName} Seja bem vindo(a) ao Ficticious Bank 🏛 apenas para fins didáticos`);
+        && msg.body != '💹 TRANSFERIR (PIX) 💹'
+        && msg.body != '🧨 ENCERRAR CONTA 🧨') {
+
+        var opcoes = [];
+
+        if (encontrado) {
+            opcoes = [
+                { body: '💻 ACESSAR MINHA CONTA 💻' },
+                { body: '🧨 ENCERRAR CONTA 🧨' }];
+        } else {
+            opcoes = [
+                { body: '🚀 ABRIR CONTA 🚀' }];
+        }
+
+        let button = new Buttons('O que deseja fazer agora?', opcoes, `🏛 Olá, ${msg._data.notifyName} Seja bem vindo(a) ao Ficticious Bank 🏛 apenas para fins didáticos`);
         client.sendMessage(msg.from, button);
+    }
+
+    if (msg.body == '🧨 ENCERRAR CONTA 🧨') {
+        //BUSCO O INDÍCE A SER REMOVIDO
+        let index = clientes.findIndex((cliente) => cliente.numero === msg.from);
+        //REMOVER O ELEMENTO DO ARRAY
+        clientes.splice(index, 1);
+        client.sendMessage(msg.from, `Sua conta e seu número foram removidos com sucesso! 👌`);
     }
 
     if (msg.body == '🚀 ABRIR CONTA 🚀') {
