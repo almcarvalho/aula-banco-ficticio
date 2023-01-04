@@ -38,12 +38,42 @@ client.on('message', msg => {
             encontrado.momento = 0;
             return;
         }
+        if (encontrado.momento == 2) {
+            //recebo a chave pix #TODO validar depois se é um número
+            encontrado.destino = msg.body;
+            client.sendMessage(msg.from, `Informe o valor que você deseja transferir`);
+            encontrado.momento = 3;
+            return;
+        }
+        if (encontrado.momento == 3) {
+            //validar
+            if (encontrado.saldo > msg.body) {
+                console.log('brooks was here');
+                encontrado.saldo = encontrado.saldo - msg.body;
+                //efetuo o pix
+                const destinoPix = clientes[encontrado.destino];
+                if (destinoPix) {
+                    destinoPix.saldo = destinoPix.saldo + parseFloat(msg.body);
+                    client.sendMessage(msg.from, `Pix de: ${msg.body} efetuado com sucesso para: ${destinoPix.nome}`);
+                } else {
+                    client.sendMessage(msg.from, `❌ Chave pix não encontrada❌`);
+                }
+                client.sendMessage(msg.from, `💸 Operação finalizada com sucesso...`);
+            } else {
+                client.sendMessage(msg.from, `❌Saldo Insuficiente ❌`);
+            }
+            encontrado.momento = 0;
+            return;
+        }
+
+
     }
 
     if (msg.body != '🚀 ABRIR CONTA 🚀'
         && msg.body != '💻 ACESSAR MINHA CONTA 💻'
         && msg.body != '💸 CONSULTAR SALDO 💸'
-        && msg.body != '🏧 SACAR DINHEIRO 🏧') {
+        && msg.body != '🏧 SACAR DINHEIRO 🏧'
+        && msg.body != '💹 TRANSFERIR (PIX) 💹') {
         let button = new Buttons('O que deseja fazer agora?', [
             { body: '🚀 ABRIR CONTA 🚀' },
             { body: '💻 ACESSAR MINHA CONTA 💻' },
@@ -51,12 +81,15 @@ client.on('message', msg => {
         client.sendMessage(msg.from, button);
     }
     if (msg.body == '🚀 ABRIR CONTA 🚀') {
-        //console.log(msg);
-        var cliente = { numero: msg.from, nome: msg._data.notifyName, saldo: 1000, momento: 0 }
-        clientes.push(cliente);
-        //console.log(`Cliente ${cliente.nome} cadastrado com sucesso!`);
-        client.sendMessage(msg.from, `💸 Parabéns, ${cliente.nome} você acaba de criar sua conta no Ficticious Bank \n 
-        ganhou um saldo de R$:${cliente.saldo} reais`);
+        var cliente = { numero: msg.from, nome: msg._data.notifyName, saldo: 1000, momento: 0, destino: 0 }
+        if (!encontrado) {
+            clientes.push(cliente);
+            client.sendMessage(msg.from, `💸 Parabéns, ${cliente.nome} você acaba de criar sua conta no Ficticious Bank \n 
+ganhou um saldo de R$:${cliente.saldo} reais`);
+        } else {
+            client.sendMessage(msg.from, `❌Você já possui uma conta aberta nesse banco! ❌`);
+        }
+
     }
     if (msg.body == '💻 ACESSAR MINHA CONTA 💻') {
         if (encontrado) {
@@ -78,6 +111,22 @@ client.on('message', msg => {
         client.sendMessage(msg.from, `💸 Informe o valor que você deseja sacar: `);
     }
 
+    if (msg.body == '💹 TRANSFERIR (PIX) 💹') {
+        //listar as pessoas que tem conta 0 - Fulano, 1 - Sicrano
+        var resultado = ``;
+
+        // clientes.forEach(currentItem => {
+        //     resultado = `\n Chave pix: ` + pix + `-` + resultado + currentItem.nome + ``;
+        // });
+
+        for (let index = 0; index < clientes.length; index++) {
+            const element = clientes[index];
+            resultado = resultado + `\n Chave pix: ` + index + `-` + element.nome + ``;
+        }
+
+        client.sendMessage(msg.from, `${resultado} \n Informe a chave pix da pessoa que você quer transferir`);
+        encontrado.momento = 2; //espero pela chave pix
+    }
 
 
 
