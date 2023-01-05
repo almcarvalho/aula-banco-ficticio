@@ -21,8 +21,5 @@
   "dependencies": {
     "whatsapp-web.js": "github:pedroslopez/whatsapp-web.js#fix-buttons-list",
     "qrcode-terminal": "github:gtanner/qrcode-terminal"
-  },
-  "engines": {
-    "node": "^14"
   }
 }
