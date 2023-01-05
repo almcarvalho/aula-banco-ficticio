@@ -14,7 +14,7 @@ var clientes = [];
 //     authStrategy: new LocalAuth()
 // });
 
-//client para rodar na heroku
+//client para rodar na heroku 
 const client = new Client({
     authStrategy: new LocalAuth(),
     puppeteer: {
