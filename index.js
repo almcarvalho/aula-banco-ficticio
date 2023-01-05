@@ -10,9 +10,16 @@ const qrcode = require('qrcode-terminal');
 var clientes = [];
 
 //criar nosso client
+// const client = new Client({
+//     authStrategy: new LocalAuth()
+// });
+
 const client = new Client({
-    authStrategy: new LocalAuth()
-});
+    authStrategy: new LocalAuth(),
+    puppeteer: {
+        args: ['--no-sandbox'],
+    }
+})
 
 client.on('qr', qr => {
     qrcode.generate(qr, { small: true })
