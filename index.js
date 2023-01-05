@@ -1,5 +1,14 @@
 const { Client, Buttons, LocalAuth } = require('whatsapp-web.js');
 const qrcode = require('qrcode-terminal');
+const express = require('express');
+
+const app = express();
+
+const port = process.env.PORT || 5000;
+
+app.listen(port, '0.0.0.0', () => {
+    console.log('Server is running s on port: ' + port)
+});
 
 //comando pra corrigir a falha que não envia os botões:
 //npm i github:pedroslopez/whatsapp-web.js#fix-buttons-list
