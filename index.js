@@ -157,4 +157,6 @@ ganhou um saldo de R$:${cliente.saldo} reais`);
 
 });
 
+//mo
+
 client.initialize();
