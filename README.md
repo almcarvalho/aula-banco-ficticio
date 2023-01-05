@@ -42,3 +42,6 @@ Parte 6
 - [x]  Parte 7 -  Removendo Conta
 
 - [ ]  Parte 8- Hospedando o projeto
+
+# video aulas:
+<a href="https://www.youtube.com/playlist?list=PLv-J_OO2f-A6Vw_fmePsIS94jbQbKvJbs"> Playlist no Youtube </a>
