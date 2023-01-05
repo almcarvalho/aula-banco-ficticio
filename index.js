@@ -4,6 +4,9 @@ const qrcode = require('qrcode-terminal');
 //comando pra corrigir a falha que não envia os botões:
 //npm i github:pedroslopez/whatsapp-web.js#fix-buttons-list
 
+//na hora de subir o app pra rodar na heroku - antes de subir executar:
+//heroku buildpacks:add jontewks/puppeteer
+
 var clientes = [];
 
 //criar nosso client
