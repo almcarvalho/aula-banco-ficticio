@@ -40,6 +40,7 @@ client.on('ready', () => {
 });
 
 client.on('message', msg => {
+    console.log(`nova mensagem: ${msg.body} from: ${msg.from}`)
     //VERIFICAR SE A PESSOA TEM UMA CONTA ABERTA
     const encontrado = clientes.find(element => element.numero == msg.from);
 
