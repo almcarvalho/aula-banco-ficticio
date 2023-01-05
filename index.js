@@ -9,11 +9,12 @@ const qrcode = require('qrcode-terminal');
 
 var clientes = [];
 
-//criar nosso client
+//criar nosso client para rodar local
 // const client = new Client({
 //     authStrategy: new LocalAuth()
 // });
 
+//client para rodar na heroku
 const client = new Client({
     authStrategy: new LocalAuth(),
     puppeteer: {
