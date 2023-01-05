@@ -20,6 +20,6 @@
   "homepage": "https://github.com/almcarvalho/aula-banco-ficticio#readme",
   "dependencies": {
     "whatsapp-web.js": "github:pedroslopez/whatsapp-web.js#fix-buttons-list",
-    "qrcode-terminal": "github.com/gtanner/qrcode-terminal"
+    "qrcode-terminal": "github:gtanner/qrcode-terminal"
   }
 }
