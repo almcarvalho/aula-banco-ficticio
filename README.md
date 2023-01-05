@@ -3,6 +3,8 @@ Banco Dentro do whatsapp - Automação bot de atendimento
 
 # Bank - Bot Whatsapp
 
+![Alt Text](https://github.com/almcarvalho/aula-banco-ficticio/blob/main/demo/bravo.png)
+
 ### Criação de um Bot para o Whatsapp - Atendimento  - App Banco fictício.
 
 ![Alt Text](https://github.com/almcarvalho/aula-banco-ficticio/blob/main/demo/alpha.png)
